@@ -1,13 +1,10 @@
 # Async Web Server Template
 
----
-
 This Python-based asynchronous web server template is designed for easy integration into other Python scripts, allowing for handling of HTTP requests and making external API calls. 
 
 
 ## Getting Started
 
---- 
 ### Basic Example
 
 To quickly launch the server and make an example request, use the following setup:
@@ -36,7 +33,7 @@ async def main():
 
 asyncio.run(main())
 ```
----
+
 ### Advanced Usage
 
 In the following example, the server processes a batch of asynchronous requests, counts successful responses, and records the start and end times:
