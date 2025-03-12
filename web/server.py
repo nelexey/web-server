@@ -6,10 +6,10 @@ from web.urls import urls
 class WebServer:
     def __init__(self, config: dict) -> None:
         """
-        Initialize the web server with configuration settings.
-
+        Инициализация сервера.
+        
         Args:
-            config (dict): Configuration for the web server including host, port, and other settings.
+            config (dict): host, port сервера (+ timeout, max_connections)
         """
         self.config = config
         self.app = web.Application()
@@ -17,7 +17,7 @@ class WebServer:
 
     def setup_routes(self) -> None:
         """
-        Sets up routes defined in the `urls` list, binding each path to its handler.
+        Настройка маршрутов.
         """
         for route in urls:
             self.app.router.add_route(
@@ -28,7 +28,7 @@ class WebServer:
 
     async def run(self) -> None:
         """
-        Starts the web server with configurations provided during initialization.
+        Запуск сервера.
         """
         runner = web.AppRunner(self.app)
         await runner.setup()
@@ -43,10 +43,10 @@ class WebServer:
 
 async def init_web_server(config: dict) -> None:
     """
-    Initializes and starts the web server with the given configuration.
-
+    Инициализация и запуск сервера.
+    
     Args:
-        config (dict): Configuration settings for the server, including host and port.
+        config (dict): Настройки.
     """
     server = WebServer(config)
     await server.run()

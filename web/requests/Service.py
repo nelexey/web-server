@@ -4,16 +4,16 @@ from typing import Any, Dict, Optional, Union
 
 
 class Service:
-    """A class to configure and execute HTTP requests to an API."""
+    """Класс для HTTP запросов."""
 
     class ResponseError(Exception):
         def __init__(self, status: int, message: str) -> None:
             """
-            Exception for handling HTTP response errors.
+            Исключение для ошибок HTTP.
 
             Args:
-                status (int): HTTP status code of the error.
-                message (str): Error message describing the issue.
+                status (int): Код статуса.
+                message (str): Сообщение ошибки.
             """
             self.status = status
             self.message = message
@@ -21,10 +21,10 @@ class Service:
 
     def __init__(self, url: str) -> None:
         """
-        Initializes the Service with a base URL.
+        Инициализация сервиса.
 
         Args:
-            url (str): Base URL for the API requests.
+            url (str): url сервиса, с которым происходит взаимодействие.
         """
         self.url = url
 
@@ -33,35 +33,38 @@ class Service:
         method: str = 'POST',
         data: Optional[Dict[str, Any]] = None,
         uri: str = '',
-        r_type: str = 'text'
+        r_type: str = ''
     ) -> Union[str, Dict[str, Any], bytes, aiohttp.ClientResponse]:
         """
-        Executes an HTTP request and returns the result in the specified format.
+        Выполнение HTTP запроса.
 
         Args:
-            method (str): HTTP method to use for the request (e.g., 'POST', 'GET').
-            data (Optional[Dict[str, Any]]): Data to send with the request.
-            uri (str): URI to append to the base URL.
-            r_type (str): Expected response type ('json', 'text', 'read') '' by default.
+            method (str): HTTP метод.
+            data (dict): Данные запроса.
+            uri (str): URI-путь.
+            r_type (str): Тип ответа.
 
         Returns:
-            Union[str, Dict[str, Any], bytes, aiohttp.ClientResponse]: Response content based on `r_type`.
+            Union[str, Dict[str, Any], bytes, aiohttp.ClientResponse]: Ответ.
 
         Raises:
-            ResponseError: If there is a connection error or response parsing issue.
+            ResponseError: Ошибка соединения.
         """
-        # Construct URL with query parameters for GET requests
+        # Формируем URL с параметрами
         if method == 'GET' and data:
             query_string = urllib.parse.urlencode(data)
             url = f"{self.url}/{uri}?{query_string}"
         else:
             url = f"{self.url}/{uri}"
 
+        
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.request(method, url, json=data) as response:
                     content_type = response.headers.get("Content-Type", "")
 
+
+                    # Адаптивно преобразовать ответ в зависимости от типа ответа
                     if r_type == 'json' and 'application/json' in content_type:
                         return await response.json()
                     elif r_type == 'text' and 'text/plain' in content_type:
