@@ -1,11 +1,7 @@
-from typing import Dict, List
+from .Router import Route
 
-from web.handlers.handlers import handle_request
+from .handlers.ping_handler import ping_handler
 
-urls: List[Dict[str, str]] = [
-    {
-        'method': 'POST',
-        'path': '/route_to_handle',
-        'handler': handle_request
-    }
+urls = [
+    Route('GET', '/ping', ping_handler)
 ]

@@ -1,14 +1,15 @@
 import asyncio
-from web.server import init_web_server
-from web.requests.Service import Service
+from web import Server
+import aiohttp
 
-async def main():
-
-    await init_web_server(config={'host': 'localhost', 'port': 8080})
-    example = Service('https://example.com')
-
-    resp = await example.make_request(method='GET', data={}, r_type='text')
+async def main() -> None:
+    main_server = Server('localhost', 8080)
     
-    print(resp)
+    await main_server.start()
 
-asyncio.run(main())
+    while True:
+        await asyncio.sleep(3600)
+
+
+if __name__=="__main__":
+    asyncio.run(main())
